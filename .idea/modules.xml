@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/../py-passwdmgr/.idea/py-pwdmanager.iml" filepath="$PROJECT_DIR$/../py-passwdmgr/.idea/py-pwdmanager.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/py-racingstats.iml" filepath="$PROJECT_DIR$/.idea/py-racingstats.iml" />
     </modules>
   </component>
