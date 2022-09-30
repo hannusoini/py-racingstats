@@ -1,7 +1,6 @@
 # racingstats
-# todo file parsing
-# todo numpy routines
-# todo gui
+# todo numpy / pandas routines
+# todo tkinter tree view
 
 from tkinter import *
 import tkinter as tk
@@ -11,6 +10,8 @@ from tkinter.scrolledtext import ScrolledText
 from tkinter import messagebox
 from tkinter import filedialog
 
+DEBUGGER_MODE=True
+
 def quit(root):
     #if messagebox.askokcancel("Quit", "Do you really want to quit?"):
         exit()
@@ -19,43 +20,32 @@ def quit(root):
 
 def load_file():
     #try:
-        races=[]
-        #todo fix load routine. Loads only last line
+        #Loads into racedata list
         with open('road.csv', 'r') as f:
+            racedata = [] #init list
             for line in f.readlines():
-                #first
-                racedata=[]
-                for n in line:
-                    racedata.append(line.rstrip().split(","))
-                races.append(racedata)
-                #race, pos = data.split(",")
-                #print(race, " | ", pos)
-            datasize=len(races)
+                racedata.append(line.rstrip().split(","))
+            datasize=len(racedata)
             print("File is loaded. Size is", datasize, "races.")
-            print(races[:][0])
-            print(races[0][0])
+            print(racedata[1:10])
+            print(racedata[0])
             #first = Label(frame, text="File is loaded.")
             #first.pack()
-        return races
+        if DEBUGGER_MODE==True:
+            with open('checksum.txt', 'w') as f:  # with closes files automatically afterwards. a append w overwrite r read
+                f.write(str(racedata)) #Write all lines
+#               f.write(str(racedata[1:10]))
+#               f.write(f'Data size is {datasize}')
+        return racedata
     #except:
     #    print("Could not load file.")
 
-#contacts = []
-#for n in range(1, 100):
-#    contacts.append((f'first {n}', f'last {n}', f'email{n}@example.com', f'date {n}'))
-
-def change_track(data):
+def change_track(racedata):
     # todo display data in tkinter multi-column list
-    first = Label(frame, text="Change Track")
-    first.pack()
-    second = Label(frame, text='Change Track', wraplength=1200)
-    second.pack()
+    pass
+    #second = Label(frame, text='Change Track 2', wraplength=1200)
+    #second.pack()
 
-#    mode = input("View Car, View Track: (C/T)").lower()
-#    if mode == "c":
-#        print("Car ")
-#    elif mode == "t":
-#        print("Track ")
 def change_car(data):
     pass
     #print("View car")
@@ -77,12 +67,13 @@ def add():
 #tkinter main_window initialisation
 main_window = Tk()
 
-window_width = 800
-window_height = 600
-
 # get the screen dimension
 screen_width = main_window.winfo_screenwidth()
 screen_height = main_window.winfo_screenheight()
+
+#Set window size
+window_width = int(screen_width*0.5)
+window_height = int(screen_height*0.9)
 
 center_x = int(screen_width/2 - window_width / 2)
 center_y = int(screen_height/2 - window_height / 2)
@@ -108,30 +99,40 @@ text.pack()
 #top_frame.grid(row=0, sticky="ew")
 #bottom_frame.grid(row=4, sticky="e")
 
-data = load_file()
-print(type(data))
+RACEDATA = load_file()
+nr_columns=len(RACEDATA[0])
+nr_lines=len(RACEDATA)
+print(type(RACEDATA))
 #
+
+if DEBUGGER_MODE == True:
+    with open('tree.txt', 'w') as f:  # with closes files automatically afterwards. a append w overwrite r read
+        f.write(str(f'{RACEDATA[0]} \n'))
+        f.write(str(f'Nr of columns is {nr_columns} \n'))
+        for n in range(len(RACEDATA[0])):
+            f.write(str(f'Column {n} is {RACEDATA[0][n]} \n'))
+
 #Define treeview
 #
-columns = ('race_id', 'season', 'week', 'date')
+# Make list of column indexes
+columns = []
+for n in range(nr_columns):
+    columns.append(f'col_{n}')
+
 tree = ttk.Treeview(main_window, columns=columns, show='headings')
 # define headings
-tree.heading('race_id', text='Race ID')
-tree.heading('season', text='Season')
-tree.heading('week', text='Week')
-tree.heading('date', text='Date')
+for n in range(nr_columns):
+    tree.heading(f'col_{n}', text=RACEDATA[0][n])
 
 # generate sample data
-contacts = []
-for n in range(1, 100):
-    contacts.append((f'first {n}', f'last {n}', f'email{n}@example.com', f'date {n}'))
+#contacts = []
+#for n in range(1, 100):
+#    contacts.append((f'first {n}', f'last {n}', f'email{n}@example.com', f'date {n}'))
 
-# add data to the treeview #todo add data from file here
-for contact in contacts:
-    tree.insert('', tk.END, values=contact)
-#each character is a line
-#for race in races:
-#    tree.insert('', tk.END, values=race)
+# add data to the treeview
+for line in range(1,nr_lines):
+    tree.insert('', tk.END, values=RACEDATA[line])
+
 def item_selected(event):
     for selected_item in tree.selection():
         item = tree.item(selected_item)
@@ -149,11 +150,11 @@ tree.pack()
 
 
 # Window layout
-button = Button(text, text="Change Track", command=lambda: change_track(data))
+button = Button(text, text="Change Track", command=lambda: change_track(RACEDATA))
 button.pack()
-button = Button(text, text="Change Car", command=lambda: change_car(data))
+button = Button(text, text="Change Car", command=lambda: change_car(RACEDATA))
 button.pack()
-first = Label(frame, text="All date")
+first = Label(frame, text=f'Dataset has {len(RACEDATA)} line items.')
 first.pack()
 
 # Menubars

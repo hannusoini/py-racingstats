@@ -1,0 +1,27 @@
+['\ufeffRace #', 'Season', 'Week', 'Date', 'Car', 'Series', 'Track', 'Qualified', 'Race finish', 'Win', 'Podium', 'Race SOF', 'Chmpship pts', 'Division', 'Inc', 'Laps', 'Avg lap time', 'Fastest Lap time', 'SR change', 'iR change', 'SR post race', 'iR post race', 'Protestee', 'Protest upheld', 'Note'] 
+Nr of columns is 25 
+Column 0 is ﻿Race # 
+Column 1 is Season 
+Column 2 is Week 
+Column 3 is Date 
+Column 4 is Car 
+Column 5 is Series 
+Column 6 is Track 
+Column 7 is Qualified 
+Column 8 is Race finish 
+Column 9 is Win 
+Column 10 is Podium 
+Column 11 is Race SOF 
+Column 12 is Chmpship pts 
+Column 13 is Division 
+Column 14 is Inc 
+Column 15 is Laps 
+Column 16 is Avg lap time 
+Column 17 is Fastest Lap time 
+Column 18 is SR change 
+Column 19 is iR change 
+Column 20 is SR post race 
+Column 21 is iR post race 
+Column 22 is Protestee 
+Column 23 is Protest upheld 
+Column 24 is Note 
