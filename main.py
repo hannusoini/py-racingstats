@@ -1,6 +1,18 @@
+__copyright__ = "Copyright (C) Hannu Soini"
+__author__ = "Hannu Soini"
+__version__ = 0, 0, 1
+__date__="2022-09-30"
+__description__="First beta version"
+
+import numpy as np
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+
 # racingstats
 # todo numpy / pandas routines
-# todo tkinter tree view
+# todo new variable for treeview only for filtering
+# todo develop selection routine
 
 from tkinter import *
 import tkinter as tk
@@ -11,6 +23,8 @@ from tkinter import messagebox
 from tkinter import filedialog
 
 DEBUGGER_MODE=True
+df=pd.read_csv('road.csv')
+
 
 def quit(root):
     #if messagebox.askokcancel("Quit", "Do you really want to quit?"):
@@ -40,13 +54,16 @@ def load_file():
     #except:
     #    print("Could not load file.")
 
-def change_track(racedata):
-    # todo display data in tkinter multi-column list
+def change_filter(racedata):
+    # todo filter by track
+    # change this into filter
+
     pass
     #second = Label(frame, text='Change Track 2', wraplength=1200)
     #second.pack()
 
-def change_car(data):
+def change_value(data):
+    #change this into filtered value
     pass
     #print("View car")
     #print(data.split(","))
@@ -86,8 +103,10 @@ main_window.title("iRacingStats - By Kristian Soini 2022")
 
 frame = Frame(main_window)
 frame.pack()
+frame.grid(row=0, column=0)
 text = Text(frame, width=window_width, height=window_height)
-text.pack()
+#text.pack()
+text.grid(row=4, column=0)
 
 ## Frames
 #top_frame = Frame(main_window, width=300, height=50, pady=3)
@@ -102,6 +121,8 @@ text.pack()
 RACEDATA = load_file()
 nr_columns=len(RACEDATA[0])
 nr_lines=len(RACEDATA)
+active_filter=''
+filter_value=''
 print(type(RACEDATA))
 #
 
@@ -124,11 +145,6 @@ tree = ttk.Treeview(main_window, columns=columns, show='headings')
 for n in range(nr_columns):
     tree.heading(f'col_{n}', text=RACEDATA[0][n])
 
-# generate sample data
-#contacts = []
-#for n in range(1, 100):
-#    contacts.append((f'first {n}', f'last {n}', f'email{n}@example.com', f'date {n}'))
-
 # add data to the treeview
 for line in range(1,nr_lines):
     tree.insert('', tk.END, values=RACEDATA[line])
@@ -136,12 +152,14 @@ for line in range(1,nr_lines):
 def item_selected(event):
     for selected_item in tree.selection():
         item = tree.item(selected_item)
-        record = item['values']
+        #record = item[] #'col_2']
         # show a message
-        showinfo(title='Information', message=','.join(record))
+        showinfo(title='Information', message='Selection is'.join(item))
+        #showinfo(title='Information', message=','.join(record))
 
 tree.bind('<<TreeviewSelect>>', item_selected)
-tree.pack()
+
+#tree.pack()
 
 # add a scrollbar
 #scrollbar = ttk.Scrollbar(main_window, orient=tk.VERTICAL, command=tree.yview)
@@ -150,12 +168,20 @@ tree.pack()
 
 
 # Window layout
-button = Button(text, text="Change Track", command=lambda: change_track(RACEDATA))
-button.pack()
-button = Button(text, text="Change Car", command=lambda: change_car(RACEDATA))
-button.pack()
-first = Label(frame, text=f'Dataset has {len(RACEDATA)} line items.')
-first.pack()
+button_filter = Button(text, text="Change Filter", command=lambda: change_filter(RACEDATA))
+#button.pack()
+button_value = Button(text, text="Change Value", command=lambda: change_value(RACEDATA))
+#button.pack()
+label_first = Label(frame, text=f'Dataset has {len(RACEDATA)} line items.')
+#first.pack()
+label_second = Label(frame, text=f'Active filter is {active_filter} and the filter value is {filter_value}.')
+#second.pack()
+button_value.grid(row=0, column=0)
+button_value.grid(row=0, column=1)
+label_first.grid(row=1, column=1)
+label_second.grid(row=2, column=1)
+tree.grid(row=3, column=0)
+
 
 # Menubars
 menubar = Menu(main_window)
